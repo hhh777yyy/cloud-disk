@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhh.clouddisk.mapper.UserMapper">
+
+    <resultMap type="com.hhh.clouddisk.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+        <result property="fileStoreId" column="file_store_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="registerTime" column="register_time" jdbcType="TIMESTAMP"/>
+        <result property="imagePath" column="image_path" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="insertColumn">
+        <if test="openId != null and openId != ''">
+            open_id,
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id,
+        </if>
+        <if test="userName != null and userName != ''">
+            user_name,
+        </if>
+        <if test="registerTime != null">
+            register_time,
+        </if>
+        <if test="imagePath != null and imagePath != ''">
+            image_path,
+        </if>
+    </sql>
+
+    <sql id="insertValue">
+        <if test="openId != null and openId != ''">
+            #{openId},
+        </if>
+        <if test="fileStoreId != null">
+            #{fileStoreId},
+        </if>
+        <if test="userName != null and userName != ''">
+            #{userName},
+        </if>
+        <if test="registerTime != null">
+            #{registerTime},
+        </if>
+        <if test="imagePath != null and imagePath != ''">
+            #{imagePath},
+        </if>
+    </sql>
+
+    <!--通用对User各个属性的值的非空判断-->
+    <sql id="commonsValue">
+        <if test="openId != null and openId != ''">
+            open_id = #{openId},
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id = #{fileStoreId},
+        </if>
+        <if test="userName != null and userName != ''">
+            user_name = #{userName},
+        </if>
+        <if test="registerTime != null">
+            register_time = #{registerTime},
+        </if>
+        <if test="imagePath != null and imagePath != ''">
+            image_path = #{imagePath},
+        </if>
+    </sql>
+
+    <!--查询所有user-->
+    <select id="queryAllUsers" resultMap="UserMap">
+        select * from user
+    </select>
+
+    <!--通过openId查询单个user-->
+    <select id="queryUserByOpenId" resultMap="UserMap">
+        select * from user where open-id = #{openId}
+    </select>
+
+    <!--通过userId查询单个user-->
+    <select id="queryUserByUserId" resultMap="UserMap">
+        select * from user where user_id = #{userId}
+    </select>
+
+    <delete id="deleteUserByOpenId" >
+        delete * from user where open_id = #{openId}
+    </delete>
+    
+    <insert id="insertUser" keyProperty="userId" useGeneratedKeys="true">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertValue"/>
+        </trim>
+    </insert>
+
+    <update id="updateUser">
+        update user
+        <set>
+            <include refid="commonsValue"></include>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+
+
+
+</mapper>

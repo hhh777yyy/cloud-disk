@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhh.clouddisk.mapper.MyFileMapper">
+
+    <sql id="insertFileColumn">
+        <if test="myFileName != null and myFileName != ''">
+            my_file_name,
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id,
+        </if>
+        <if test="myFilePath != null">
+            my_file_path,
+        </if>
+        <if test="parentFolderId != null">
+            parent_folder_id,
+        </if>
+        <if test="size != null">
+            size,
+        </if>
+        <if test="type != null">
+            type,
+        </if>
+        <if test="postfix != null">
+            postfix,
+        </if>
+    </sql>
+
+    <sql id="insertFileValue">
+        <if test="myFileName != null and myFileName != ''">
+            #{myFileName},
+        </if>
+        <if test="fileStoreId != null">
+            #{fileStoreId},
+        </if>
+        <if test="myFilePath != null">
+            #{myFilePath},
+        </if>
+        <if test="parentFolderId != null">
+            #{parentFolderId},
+        </if>
+        <if test="size != null">
+            #{size},
+        </if>
+        <if test="type != null">
+            #{type},
+        </if>
+        <if test="postfix != null">
+            #{postfix},
+        </if>
+    </sql>
+
+    <sql id="updateList">
+        <if test="myFileName != null and myFileName != ''">
+            my_file_name = #{myFileName},
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id = #{fileStoreId},
+        </if>
+        <if test="myFilePath != null and myFilePath != ''" >
+            my_file_path = #{myFilePath},
+        </if>
+        <if test="downloadTime != null">
+            download_time = #{downloadTime},
+        </if>
+        <if test="parentFolderId != null">
+            parent_folder = #{parentFolderId},
+        </if>
+        <if test="size != null">
+            size = #{size},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="postfix != null">
+            postfix = #{postfix},
+        </if>
+    </sql>
+
+    <sql id="queryAndList">
+        <if test="myFileId != null">
+            my_file_id = #{myFileId} and
+        </if>
+        <if test="myFileName != null and myFileName != ''">
+            my_file_name = #{myFileName} and
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id = #{fileStoreId} and
+        </if>
+        <if test="myFilePath != null and myFilePath != ''" >
+            my_file_path = #{myFilePath} and
+        </if>
+        <if test="downloadTime != null">
+            download_time = #{downloadTime} and
+        </if>
+        <if test="parentFolderId != null">
+            parent_folder = #{parentFolderId} and
+        </if>
+        <if test="size != null">
+            size = #{size} and
+        </if>
+        <if test="type != null">
+            type = #{type} and
+        </if>
+        <if test="postfix != null">
+            postfix = #{postfix} and
+        </if>
+    </sql>
+
+    <sql id="queryOrList">
+        <if test="myFileId != null">
+            my_file_id = #{myFileId} or
+        </if>
+        <if test="myFileName != null and myFileName != ''">
+            my_file_name = #{myFileName} or
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id = #{fileStoreId} or
+        </if>
+        <if test="myFilePath != null and myFilePath != ''" >
+            my_file_path = #{myFilePath} or
+        </if>
+        <if test="downloadTime != null">
+            download_time = #{downloadTime} or
+        </if>
+        <if test="parentFolderId != null">
+            parent_folder = #{parentFolderId} or
+        </if>
+        <if test="size != null">
+            size = #{size} or
+        </if>
+        <if test="type != null">
+            type = #{type} or
+        </if>
+        <if test="postfix != null">
+            postfix = #{postfix} or
+        </if>
+    </sql>
+
+    <insert id="insertFile" keyProperty="myFileId" useGeneratedKeys="false">
+        insert into my_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertFileColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertFileValue"/>
+        </trim>
+    </insert>
+
+    <delete id="deleteFileByMyFileId">
+        delete from my_file where my_file_id = #{myFileId}
+    </delete>
+
+    <update id="updateFile">
+        update my_file
+        <set>
+            <include refid="updateList"></include>
+        </set>
+        where my_file_id = #{myFileId}
+    </update>
+
+    <select id="queryFileAnd" resultType="com.hhh.clouddisk.entity.MyFile">
+        select * from my_file
+        <trim prefix="where " suffixOverrides="and">
+            <include refid="queryAndList"/>
+        </trim>
+    </select>
+
+    <select id="queryFileOr" resultType="com.hhh.clouddisk.entity.MyFile">
+        select * from my_file
+        <trim prefix="where " suffixOverrides="or">
+            <include refid="queryOrList"/>
+        </trim>
+    </select>
+</mapper>

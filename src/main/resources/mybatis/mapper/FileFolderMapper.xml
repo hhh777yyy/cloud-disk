@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhh.clouddisk.mapper.FileFolderMapper">
+
+    <!--通用对User各个属性的值的非空判断-->
+    <sql id="updateList">
+        <if test="fileFolderName != null and fileFolderName != ''">
+            file_folder_name = #{fileFolderName},
+        </if>
+        <if test="parentFolderId != null">
+            parent_folder_id = #{parentFolderId},
+        </if>
+    </sql>
+
+    <sql id="insertFolderColumn">
+        <if test="fileFolderName != null and fileFolderName != ''">
+            file_folder_name,
+        </if>
+        <if test="parentFolderId != null">
+            parent_folder_id,
+        </if>
+        <if test="fileStoreId != null">
+            file_store_id,
+        </if>
+    </sql>
+
+    <sql id="insertFolderValue">
+        <if test="fileFolderName != null and fileFolderName != ''">
+            #{fileFolderName},
+        </if>
+        <if test="parentFolderId != null">
+            #{parentFolderId},
+        </if>
+        <if test="fileStoreId != null">
+            #{fileStoreId},
+        </if>
+    </sql>
+<!--keyProperty="fileFolderId" useGeneratedKeys="false"-->
+    <insert id="insertFileFolder" >
+        insert into file_folder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="insertFolderColumn"/>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <include refid="insertFolderValue"/>
+        </trim>
+    </insert>
+
+    <delete id="deleteFileFolderById">
+        delete from file_folder where file_folder_id = #{fileFolderId}
+    </delete>
+
+    <update id="updateFileFolderById">
+        update file_folder
+        <set>
+            <include refid="updateList"></include>
+        </set>
+        where file_folder_id = #{fileFolderId}
+    </update>
+
+    <select id="queryAllFileFolders" resultType="com.hhh.clouddisk.entity.FileFolder">
+        select * from file_folder
+    </select>
+
+
+    <select id="queryFileFolderByFileFolderId" resultType="com.hhh.clouddisk.entity.FileFolder">
+        select * from file_folder where file_folder_id = #{fileFolderId}
+    </select>
+
+    <select id="queryFileFolderByParentFolderId" resultType="com.hhh.clouddisk.entity.FileFolder">
+        select * from file_folder where parent_folder_id = #{parentFolderId}
+    </select>
+
+    <select id="queryFileFolderByFileStoreId" resultType="com.hhh.clouddisk.entity.FileFolder">
+        select * from file_folder where file_store_id = #{fileStoreId}
+    </select>
+
+    <select id="queryFileFolderByFileFolderName" resultType="com.hhh.clouddisk.entity.FileFolder">
+        select * from file_folder where file_folder_name = #{fileFolderName}
+    </select>
+
+</mapper>
