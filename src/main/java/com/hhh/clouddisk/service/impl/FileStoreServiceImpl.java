@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class FileStoreServiceImpl extends BaseService implements FileStoreService {
 
+    /**
+     * 添加文件仓库
+     **/
     @Override
     public Boolean insertFileStore(int userId) {
         if(fileStoreMapper.queryFileStoreByUserId(userId) == null){
@@ -21,6 +24,9 @@ public class FileStoreServiceImpl extends BaseService implements FileStoreServic
         }
     }
 
+    /**
+     * 通过fileStoreId删除文件仓库
+     **/
     @Override
     public Boolean delteFileStoreByFileStoreId(int fileStoreId) {
         if(fileStoreMapper.queryFileStoreByFileStoreId(fileStoreId) != null){
@@ -30,6 +36,9 @@ public class FileStoreServiceImpl extends BaseService implements FileStoreServic
         }
     }
 
+    /**
+     * 通过userId删除文件仓库
+     **/
     @Override
     public Boolean delteFileStoreByUserId(int userId) {
         if(fileStoreMapper.queryFileStoreByUserId(userId) != null){
@@ -39,6 +48,9 @@ public class FileStoreServiceImpl extends BaseService implements FileStoreServic
         }
     }
 
+    /**
+     * 修改仓库当前已使用的容量
+     **/
     @Override
     public Boolean addSize(int fileStoreId, double size) {
         if(fileStoreMapper.queryFileStoreByFileStoreId(fileStoreId) != null){
@@ -48,6 +60,9 @@ public class FileStoreServiceImpl extends BaseService implements FileStoreServic
         }
     }
 
+    /**
+     * 修改仓库当前已使用的容量
+     **/
     @Override
     public Boolean subSize(int fileStoreId, double size) {
         if(fileStoreMapper.queryFileStoreByFileStoreId(fileStoreId) != null){
@@ -57,11 +72,17 @@ public class FileStoreServiceImpl extends BaseService implements FileStoreServic
         }
     }
 
+    /**
+     * 根据用户id获得文件仓库
+     **/
     @Override
     public FileStore queryFileStoreByUserId(int userId) {
         return fileStoreMapper.queryFileStoreByUserId(userId);
     }
 
+    /**
+     * 根据文件仓库id获得文件仓库
+     **/
     @Override
     public FileStore queryFileStoreByFileStoreId(int fileStoreId) {
         return fileStoreMapper.queryFileStoreByFileStoreId(fileStoreId);

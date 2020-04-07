@@ -79,4 +79,21 @@
         select * from file_folder where file_folder_name = #{fileFolderName}
     </select>
 
+
+    <delete id="deleteFileFolderByParentFolderId">
+        delete from file_folder where parent_folder_id = #{parentFolderId}
+    </delete>
+
+    <delete id="deleteFileFolderByFileStoreId">
+        delete from file_folder where file_store_id = #{fileStoreId}
+    </delete>
+
+    <select id="queryFileFolderCountByFileStoreId">
+        select count(*) from file_folder where file_store_id = #{fileStoreId}
+    </select>
+
+    <select id="queryRootFileFolderByFileStoreId">
+        select * from file_folder where parent_folder_id = 0 and file_store_id = #{fileStoreId}
+    </select>
+
 </mapper>
