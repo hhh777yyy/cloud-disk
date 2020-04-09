@@ -73,7 +73,7 @@
 
     <!--通过openId查询单个user-->
     <select id="queryUserByOpenId" resultMap="UserMap">
-        select * from user where open-id = #{openId}
+        select * from user where open_id = #{openId}
     </select>
 
     <!--通过userId查询单个user-->
