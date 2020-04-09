@@ -9,12 +9,12 @@ import java.util.List;
 @Mapper
 public interface MyFileMapper {
 
-    /*
+    /**
      * 添加文件
      */
     Boolean insertFile(MyFile myFile);
 
-    /*
+    /**
      * 根据文件的id删除文件
      */
     Boolean deleteFileByMyFileId(int myFileId);
@@ -42,7 +42,7 @@ public interface MyFileMapper {
     MyFile queryFileByMyFileId(int myFileId);
 
     /**
-     * 根据文件的id获取文件
+     * 根据文件的Name获取文件
      **/
     MyFile queryFileByMyFileName(String myFileName);
 
@@ -64,11 +64,7 @@ public interface MyFileMapper {
     /**
      * 获取仓库的统计信息
      **/
-    FileStoreStatistics getCountStatistics(int id);
-    /**
-     * List<MyFile> queryFileOr(MyFile myFile);
-     * List<MyFile> queryFileAnd(MyFile myFile);
-     **/
+    FileStoreStatistics getCountStatistics(int fileStoreId);
 
 
     //还要添加queryFileById……
