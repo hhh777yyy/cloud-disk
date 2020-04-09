@@ -1,5 +1,6 @@
 package com.hhh.clouddisk.service.impl;
 
+import com.hhh.clouddisk.entity.FileStoreStatistics;
 import com.hhh.clouddisk.entity.MyFile;
 import com.hhh.clouddisk.service.MyFileService;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,11 @@ public class MyFileServiceImpl extends BaseService implements MyFileService {
     @Override
     public List<MyFile> queryFileByType(int fileStoreId, int type) {
         return myFileMapper.queryFileByType(fileStoreId,type);
+    }
+
+    @Override
+    public FileStoreStatistics getCountStatistics(int fileStoreId) {
+        return myFileMapper.getCountStatistics(fileStoreId);
     }
 
     private Boolean isExist(String myFileName){
