@@ -103,21 +103,26 @@
         delete from my_file where parent_folder_id = #{parentFolderId}
     </delete>
 
-    <select id="queryFileByMyFileId">
+    <select id="queryFileByMyFileId" resultType="com.hhh.clouddisk.entity.MyFile">
         select * from my_file where my_file_id = #{myFileId}
     </select>
 
-    <select id="queryRootFileByFileStoreId">
+    <select id="queryRootFileByFileStoreId" resultType="com.hhh.clouddisk.entity.MyFile">
         select * from my_file where file_store_id = #{fileStoreId} and parent_folder_id = 0
     </select>
 
-    <select id="queryFileByParentFolderId">
+    <select id="queryFileByParentFolderId" resultType="com.hhh.clouddisk.entity.MyFile">
         select * from my_file where parent_folder_id = #{parentFolderId}
     </select>
 
-    <select id="queryFileByType">
+    <select id="queryFileByType" resultType="com.hhh.clouddisk.entity.MyFile">
         select * from my_file where file_store_id = #{fileStoreId} and type = #{type}
     </select>
 
+    <select id="getCountStatistics" resultType="com.hhh.clouddisk.entity.FileStoreStatistics">
+        select sum(type = 1) doc,sum(type = 2) image,sum(type = 3) video,
+      sum(type = 4) music,sum(type = 5) other,count(*) fileCount from my_file
+      where file_store_id = #{fileStoreId}
+    </select>
 
 </mapper>
