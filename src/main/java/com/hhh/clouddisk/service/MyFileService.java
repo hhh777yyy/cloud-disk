@@ -1,5 +1,6 @@
 package com.hhh.clouddisk.service;
 
+import com.hhh.clouddisk.entity.FileStoreStatistics;
 import com.hhh.clouddisk.entity.MyFile;
 
 import java.util.List;
@@ -50,7 +51,10 @@ public interface MyFileService {
      **/
     List<MyFile> queryFileByType(int fileStoreId,int type);
 
-//    List<MyFile> queryFileAnd(MyFile myFile);
-//
-//    List<MyFile> queryFileOr(MyFile myFile);
+    /**
+     * 获取仓库的统计信息
+     **/
+    FileStoreStatistics getCountStatistics(int fileStoreId);
+
+
 }
