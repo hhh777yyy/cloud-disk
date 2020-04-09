@@ -16,21 +16,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-public class LoginController {
+@Controller
+public class LoginController extends  BaseController{
 
-    @Autowired
-    UserService userService;
 
-    @Autowired
-    FileStoreService fileStoreService;
-
-    @Autowired
-    FileFolderService fileFolderService;
-
-    @Autowired
-    MyFileService myFileService;
-
+    @GetMapping("/admin")
+    public String adminLogin() {
+        User user = userService.queryUserByOpenId("1");
+//        logger.info("QQ用户登录成功！" + user);
+        session.setAttribute("loginUser", user);
+        return "redirect:/index";
+    }
 
 
 }
