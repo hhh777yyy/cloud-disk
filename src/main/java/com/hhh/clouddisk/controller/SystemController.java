@@ -45,7 +45,8 @@ public class SystemController extends  BaseController{
         if (fId == null || fId==0){
 //            代表当前为根目录
             fId = 0;
-            folders = fileFolderService.queryFileFolderByParentFolderId(fId);
+//            folders = fileFolderService.queryFileFolderByParentFolderId(fId);
+            folders = fileFolderService.queryRootFileFolderByFileStoreId(loginUser.getFileStoreId());
             files = myFileService.queryFileByParentFolderId(fId);
             nowFolder = FileFolder.builder().fileFolderId(fId).build();
             location.add(nowFolder);
@@ -57,7 +58,7 @@ public class SystemController extends  BaseController{
             nowFolder = fileFolderService.queryFileFolderByFileFolderId(fId);
             FileFolder temp = nowFolder;
             while (temp.getParentFolderId() != 0){
-                temp = fileFolderService.queryFileFolderByFileFolderId(temp.getFileFolderId());
+                temp = fileFolderService.queryFileFolderByFileFolderId(temp.getParentFolderId());
                 location.add(temp);
             }
         }
@@ -98,7 +99,7 @@ public class SystemController extends  BaseController{
             nowFolder = fileFolderService.queryFileFolderByFileFolderId(fId);
             FileFolder temp = nowFolder;
             while (temp.getParentFolderId() != 0){
-                temp = fileFolderService.queryFileFolderByFileFolderId(temp.getFileFolderId());
+                temp = fileFolderService.queryFileFolderByFileFolderId(temp.getParentFolderId());
                 location.add(temp);
             }
         }
