@@ -107,6 +107,10 @@
         select * from my_file where my_file_id = #{myFileId}
     </select>
 
+    <select id="queryFileByMyFileName" resultType="com.hhh.clouddisk.entity.MyFile">
+        select * from my_file where my_file_name = #{myFileName}
+    </select>
+
     <select id="queryRootFileByFileStoreId" resultType="com.hhh.clouddisk.entity.MyFile">
         select * from my_file where file_store_id = #{fileStoreId} and parent_folder_id = 0
     </select>

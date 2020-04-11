@@ -15,11 +15,9 @@ public class MyFileServiceImpl extends BaseService implements MyFileService {
      **/
     @Override
     public Boolean insertFile(MyFile myFile) {
-        if (isExist(myFile.getMyFileName())){
-            return false;
-        }else {
+
             return myFileMapper.insertFile(myFile);
-        }
+
     }
 
     /**

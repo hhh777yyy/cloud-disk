@@ -88,11 +88,11 @@
         delete from file_folder where file_store_id = #{fileStoreId}
     </delete>
 
-    <select id="queryFileFolderCountByFileStoreId">
+    <select id="queryFileFolderCountByFileStoreId" resultType="com.hhh.clouddisk.entity.FileFolder">
         select count(*) from file_folder where file_store_id = #{fileStoreId}
     </select>
 
-    <select id="queryRootFileFolderByFileStoreId">
+    <select id="queryRootFileFolderByFileStoreId" resultType="com.hhh.clouddisk.entity.FileFolder">
         select * from file_folder where parent_folder_id = 0 and file_store_id = #{fileStoreId}
     </select>
 

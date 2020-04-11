@@ -13,11 +13,9 @@ public class FileFolderServiceImpl extends BaseService implements FileFolderServ
      **/
     @Override
     public Boolean insertFileFolder(FileFolder fileFolder) {
-        if (isExist(fileFolder.getFileFolderName())){
-            return false;
-        }else {
+
             return fileFolderMapper.insertFileFolder(fileFolder);
-        }
+
     }
     /**
      * 根据文件夹的id修改文件夹信息
