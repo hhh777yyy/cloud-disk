@@ -1,7 +1,7 @@
 # 配置项目名和session的过期时间
 server:
   servlet:
-#    context-path: /cloud-disk
+    context-path: /moti-cloud
     session:
       timeout: 60m
   tomcat:
@@ -29,7 +29,7 @@ spring:
     password: manager
 
 #    url: jdbc:mysql://xxxxxxxx:3306/moti-cloud?serverTimezone=Hongkong&useAffectedRows=true
-    url: jdbc:mysql://39.97.120.22:3306/CLOUD?serverTimezone=Hongkong&useAffectedRows=true
+    url: jdbc:mysql://39.97.120.22:3301/CLOUD?serverTimezone=Hongkong&useAffectedRows=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     # 配置druid数据源
@@ -57,7 +57,21 @@ spring:
       charset: UTF-8
       enabled: true
   # 配置文件上传相关
-#  servlet:
-#    multipart:
-#      max-file-size: 1024MB
-#      max-request-size: 1024MB
+  servlet:
+    multipart:
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+    cache: false
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**
