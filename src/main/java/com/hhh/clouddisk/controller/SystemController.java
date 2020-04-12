@@ -3,6 +3,8 @@ package com.hhh.clouddisk.controller;
 import com.hhh.clouddisk.entity.FileFolder;
 import com.hhh.clouddisk.entity.FileStoreStatistics;
 import com.hhh.clouddisk.entity.MyFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,6 +16,8 @@ import java.util.Map;
 
 @Controller
 public class SystemController extends  BaseController{
+
+    private Logger logger = LoggerFactory.getLogger(SystemController.class);
     /**
      * 前往网盘文件主页
      */
@@ -69,7 +73,7 @@ public class SystemController extends  BaseController{
         map.put("files", files);
         map.put("nowFolder", nowFolder);
         map.put("location", location);
-//        logger.info("网盘页面域中的数据:" + map);
+        logger.info("网盘页面域中的数据:" + map);
         return "u-admin/files";
     }
 
@@ -109,7 +113,7 @@ public class SystemController extends  BaseController{
         map.put("folders", folders);
         map.put("nowFolder", nowFolder);
         map.put("location", location);
-//        logger.info("网盘页面域中的数据:" + map);
+        logger.info("网盘页面域中的数据:" + map);
         return "u-admin/upload";
     }
 

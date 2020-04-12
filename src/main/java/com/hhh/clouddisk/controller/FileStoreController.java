@@ -1,5 +1,6 @@
 package com.hhh.clouddisk.controller;
 
+import com.aliyun.oss.common.utils.LogUtils;
 import com.hhh.clouddisk.entity.FileFolder;
 import com.hhh.clouddisk.entity.FileStore;
 import com.hhh.clouddisk.entity.MyFile;
@@ -7,6 +8,8 @@ import com.hhh.clouddisk.service.MyFileService;
 import com.hhh.clouddisk.utils.FtpUtil;
 import org.apache.commons.net.ftp.FTP;
 import org.omg.CORBA.INTERNAL;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,16 +27,22 @@ import java.util.Map;
 @Controller
 public class FileStoreController extends  BaseController{
 
+    private Logger logger = LoggerFactory.getLogger(FileStoreController.class);
+
+
     /**
      * 上传文件
+     * 步骤：
+     * 1、判断是否满足条件：
+     *      同一文件目录下是否有相同文件
+     *      判断文件大小是否在剩余容量范围内
+     * 2、上传到ftp服务器
+     * 3、更新数据库，insert file需要传递以下值：my_file_name、file_store_id、my_file_path、parent_folder_id、size、type、postfix
      */
     @PostMapping("/uploadFile")
     @ResponseBody
     public Map<String, Object> uploadFile(@RequestParam("file") MultipartFile files) {
         Map<String, Object> map = new HashMap<>();
-//        上传到ftp服务器
-//        更新mysql，insert file需要传递以下值：
-//        my_file_name、file_store_id、my_file_path、parent_folder_id、size、type、postfix
 
         FileStore fileStore = fileStoreService.queryFileStoreByUserId(loginUser.getUserId());
         Integer folderId = Integer.valueOf(request.getHeader("id"));
@@ -51,6 +60,7 @@ public class FileStoreController extends  BaseController{
         }
         for (int i=0;i<myFiles.size();i++){
             if ((myFiles.get(i).getMyFileName()+myFiles.get(i).getPostfix()).equals(name)){
+                logger.error("当前文件已存在!上传失败...");
                 map.put("code", 501);
                 return map;
             }
@@ -58,6 +68,7 @@ public class FileStoreController extends  BaseController{
 
 //        判断文件大小是否在剩余容量范围内
         if(fileStore.getCurrentSize() + sizeInt > fileStore.getMaxSize()){
+            logger.error("上传失败!仓库已满。");
             map.put("code", 503);
             return map;
         }
@@ -77,6 +88,7 @@ public class FileStoreController extends  BaseController{
         try {
             Boolean b = FtpUtil.uploadFile(myFilePath,name,files.getInputStream());
             if (b){
+                logger.info("文件上传成功!"+files.getOriginalFilename());
 //              更新到数据库
                 MyFile myfile = MyFile.builder()
                         .myFileName(myFileName)
@@ -95,6 +107,7 @@ public class FileStoreController extends  BaseController{
                     e.printStackTrace();
                 }
             }else {
+                logger.error("文件上传失败!"+files.getOriginalFilename());
                 map.put("code", 504);
             }
         } catch (IOException e) {
@@ -106,7 +119,9 @@ public class FileStoreController extends  BaseController{
 
     /**
      * 下载文件
-     * fId:文件id
+     * 步骤：
+     * 1、从ftp服务器拉取文件
+     * 2、同步数据库，downloadtime + 1
      */
     @GetMapping("/downloadFile")
     public void downloadFile(@RequestParam Integer fId){
@@ -128,6 +143,7 @@ public class FileStoreController extends  BaseController{
 
             boolean b = FtpUtil.downloadFile(myFilePath, myFileName, os);
             if (b){
+                logger.info("文件下载成功!" + myFile);
                 MyFile file = myFile.builder().myFileId(fId).downloadTime(downloadTime + 1).build();
                 myFileService.updateFile(file);
 
@@ -152,6 +168,9 @@ public class FileStoreController extends  BaseController{
 
     /**
      * 删除文件
+     * 步骤：
+     * 1、在ftp服务器中删除该文件
+     * 2、同步数据库，delete文件
      */
     @GetMapping("/deleteFile")
     public String deleteFile(@RequestParam Integer fId,Integer folder){
@@ -164,11 +183,15 @@ public class FileStoreController extends  BaseController{
             myFileService.deleteFileByMyFileId(fId);
             fileStoreService.subSize(myFile.getFileStoreId(),myFile.getSize());
         }
+        logger.info("删除文件成功!"+myFile);
         return "redirct:/files?fId="+folder;
     }
 
     /**
      * 删除文件夹并清空文件
+     * 步骤：
+     * 1、在ftp服务器中删除该文件夹下的所有文件及其子文件夹下的所有文件
+     * 2、同步数据库，delete文件和delete文件夹
      */
     @GetMapping("/deleteFolder")
     public String deleteFolder(@RequestParam Integer fId){
@@ -207,6 +230,9 @@ public class FileStoreController extends  BaseController{
 
     /**
      * 添加文件夹
+     * 步骤：
+     * 1、判断是否有同名文件夹
+     * 2、同步数据库，insert文件夹
      */
     @PostMapping("/addFolder")
     public String addFolder(FileFolder folder, Map<String, Object> map) {
@@ -228,11 +254,15 @@ public class FileStoreController extends  BaseController{
         }
 
         fileFolderService.insertFileFolder(folder);
+        logger.info("添加文件夹成功!"+folder);
         return "redirect:/files?fId="+folder.getParentFolderId();
     }
 
     /**
      * 重命名文件夹
+     * 步骤：
+     * 1、判断是否有同名文件夹
+     * 2、同步数据库，update文件夹
      */
     @PostMapping("/updateFolder")
     public String updateFolder(FileFolder folder,Map<String, Object> map) {
@@ -250,18 +280,19 @@ public class FileStoreController extends  BaseController{
         }
         for (int i = 0 ;i<fileFolders.size();i++){
             if (fileFolders.get(i).getFileFolderName().equals(fileFolder.getFileFolderName())){
+                logger.info("重命名文件夹失败!文件夹已存在...");
                 return "redirect:/files?error=2&fId="+fileFolder.getParentFolderId();
             }
         }
 
         fileFolderService.updateFileFolderById(fileFolder);
+        logger.info("重命名文件夹成功!"+folder);
         return "redirect:/files?fId="+fileFolder.getParentFolderId();
     }
 
     /**
      * 重命名文件
-     * myFileName: bilibiliMail2
-     * myFileId: 589
+     * 可以修改文件名和已有文件名一致
      */
     @PostMapping("/updateFileName")
     public String updateFileName(MyFile file, Map<String, Object> map) {
@@ -277,6 +308,7 @@ public class FileStoreController extends  BaseController{
 
             if (FtpUtil.reNameFile(oldAllName,newAllName)){
                 myFileService.updateFile(MyFile.builder().myFileId(file.getMyFileId()).myFileName(newName).build());
+                logger.info("修改文件名成功!原文件名:"+oldName+"  新文件名:"+newName);
             }
         }
 
