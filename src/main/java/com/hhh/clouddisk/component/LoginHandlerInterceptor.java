@@ -14,7 +14,7 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
         Object loginUser = request.getSession().getAttribute("loginUser");
         if (loginUser==null){
             //未登录,返回登录页面
-            response.sendRedirect("/");
+            response.sendRedirect("/moti-cloud/");
             return false;
 
         }else {
