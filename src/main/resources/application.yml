@@ -10,7 +10,7 @@ server:
 # 日志的存放位置与级别
 logging:
   file:
-    name: log/cloud-disk.log
+    name: log/cloud.log
   level:
     root: info
 # 配置Mybatis
@@ -28,7 +28,7 @@ spring:
     username: root
     password: manager
 
-#    url: jdbc:mysql://xxxxxxxx:3306/moti-cloud?serverTimezone=Hongkong&useAffectedRows=true
+
     url: jdbc:mysql://39.97.120.22:3301/CLOUD?serverTimezone=Hongkong&useAffectedRows=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -48,9 +48,6 @@ spring:
     maxPoolPreparedStatementPerConnectionSize: 20
     useGlobalDataSourceStat: true
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
-  # 配置ThymeLeaf模板缓存
-#  thymeleaf:
-#    cache: true
   http:
     encoding:
       force: true
@@ -62,16 +59,17 @@ spring:
       max-file-size: 1024MB
       max-request-size: 1024MB
   thymeleaf:
-    prefix: classpath:/templates/
-    suffix: .html
-    mode: HTML5
+#    prefix: classpath:/templates/
+#    suffix: .html
+#    mode: HTML5
     encoding: utf-8
     servlet:
       content-type: text/html
+      # 禁用ThymeLeaf模板缓存
     cache: false
-  resources:
-    chain:
-      strategy:
-        content:
-          enabled: true
-          paths: /**
+#  resources:
+#    chain:
+#      strategy:
+#        content:
+#          enabled: true
+#          paths: /**

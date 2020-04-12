@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhh.clouddisk.mapper.FileFolderMapper">
 
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
+
     <!--通用对User各个属性的值的非空判断-->
     <sql id="updateList">
         <if test="fileFolderName != null and fileFolderName != ''">

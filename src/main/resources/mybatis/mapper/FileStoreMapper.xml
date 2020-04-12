@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhh.clouddisk.mapper.FileStoreMapper">
 
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"></cache>
+
     <sql id="insertComlumn"></sql>
 
     <insert id="insertFileStore"  keyProperty="fileStoreId" useGeneratedKeys="false">
